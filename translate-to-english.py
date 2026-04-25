@@ -28,7 +28,7 @@ import sys
 # ---------------------------------------------------------------------------
 CACHE_DIR = os.path.expanduser("~/.claude/hooks/cache")
 CACHE_MAX_ENTRIES = 500
-OLLAMA_MODEL = "qwen2.5:3b"
+OLLAMA_MODEL = "qwen2.5:7b"
 
 
 # ---------------------------------------------------------------------------
@@ -154,16 +154,18 @@ def translate_with_ollama(text: str) -> str | None:
             {
                 "role": "system",
                 "content": (
-                    "Translate the following Chinese text into English. "
-                    "Preserve the original meaning faithfully. Keep code, file paths, variable names, "
-                    "and technical terms exactly as-is. "
-                    "Output ONLY the translated text. No explanations, no preamble."
+                    "You are a translator converting Chinese instructions into natural English for an AI coding assistant. "
+                    "Produce fluent, idiomatic English that a native speaker would naturally say — "
+                    "restructure sentences as needed, do NOT translate word-for-word. "
+                    "Convey the speaker's intent clearly. "
+                    "Keep code snippets, file paths, variable names, technical terms, and any English words exactly as-is. "
+                    "Output ONLY the translated text. No explanations, no quotes, no preamble."
                 ),
             },
             {"role": "user", "content": text},
         ],
         "stream": False,
-        "options": {"num_predict": 256},
+        "options": {"num_predict": 512, "temperature": 0},
     })
 
     try:
